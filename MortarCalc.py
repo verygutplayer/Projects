@@ -1,4 +1,4 @@
-
+```python
 import tkinter as tk
 from tkinter import messagebox
 import math
@@ -10,14 +10,17 @@ def valid_coordinate(value):
     with no more than 2 decimal places.
     """
 
+    # Empty input
     if not value:
         return False
 
+    # Try converting to a float
     try:
         float(value)
     except ValueError:
         return False
 
+    # Check decimal places
     if "." in value:
         decimal_part = value.split(".")[1]
 
@@ -30,14 +33,16 @@ def valid_coordinate(value):
 def calculate_distance():
     """
     Gets the four coordinates, validates them,
-    calculates the distance, and displays it.
+    calculates the mortar distance, and displays it.
     """
 
+    # Get values from the input boxes
     mortar_x_value = mortar_x.get().strip()
     mortar_y_value = mortar_y.get().strip()
     target_x_value = target_x.get().strip()
     target_y_value = target_y.get().strip()
 
+    # Validate all four inputs
     coordinates = [
         ("Mortar X", mortar_x_value),
         ("Mortar Y", mortar_y_value),
@@ -54,23 +59,29 @@ def calculate_distance():
             )
             return
 
-    # Convert input strings to floating-point numbers
+    # Convert strings to floating point numbers
     x1 = float(mortar_x_value)
     y1 = float(mortar_y_value)
 
     x2 = float(target_x_value)
     y2 = float(target_y_value)
 
-    # Calculate coordinate differences
+    # Calculate the difference between the coordinates
+    #
+    # Multiplying by 100 converts the coordinate
+    # difference into the desired rangefinder units.
     x_result = (x1 - x2) * 100
     y_result = (y1 - y2) * 100
 
-    # Calculate final distance
+    # Calculate the distance using the Pythagorean theorem
+    #
+    # Squaring the values automatically removes
+    # any negative sign.
     distance = math.sqrt(
         x_result ** 2 + y_result ** 2
     )
 
-    # Display result
+    # Display the result
     result.config(state="normal")
     result.delete(0, tk.END)
     result.insert(0, f"{distance:.2f}")
@@ -95,73 +106,46 @@ def clear_fields():
     mortar_x.focus()
 
 
-# =========================================================
-# MAIN WINDOW
-# =========================================================
+# ---------------------------------------------------------
+# Main window
+# ---------------------------------------------------------
 
 root = tk.Tk()
 
 root.title("Mortar Rangefinder")
-root.geometry("900x500")
-root.minsize(800, 450)
+root.geometry("430x420")
+root.resizable(False, False)
 
 
-# =========================================================
-# MAIN LAYOUT
-# =========================================================
-
-# Left side = controls
-# Right side = map
-
-left_frame = tk.Frame(root)
-left_frame.pack(
-    side="left",
-    fill="y",
-    padx=25,
-    pady=20
-)
-
-
-right_frame = tk.Frame(root)
-right_frame.pack(
-    side="right",
-    fill="both",
-    expand=True,
-    padx=(0, 25),
-    pady=20
-)
-
-
-# =========================================================
-# LEFT SIDE - TITLE
-# =========================================================
+# ---------------------------------------------------------
+# Title
+# ---------------------------------------------------------
 
 title = tk.Label(
-    left_frame,
+    root,
     text="MORTAR RANGEFINDER",
     font=("Arial", 18, "bold")
 )
 
-title.pack(pady=(5, 5))
+title.pack(pady=(20, 5))
 
 
 subtitle = tk.Label(
-    left_frame,
-    text="Calculate the distance between\n"
-         "two map coordinates",
+    root,
+    text="Calculate the distance between two map coordinates",
     font=("Arial", 9)
 )
 
-subtitle.pack(pady=(0, 25))
+subtitle.pack(pady=(0, 20))
 
 
-# =========================================================
-# COORDINATE INPUTS
-# =========================================================
+# ---------------------------------------------------------
+# Coordinate input frame
+# ---------------------------------------------------------
 
-coordinate_frame = tk.Frame(left_frame)
+coordinate_frame = tk.Frame(root)
 
-coordinate_frame.pack(fill="x")
+coordinate_frame.pack(padx=30, fill="x")
 
 
 # ---------------------------------------------------------
@@ -183,6 +167,8 @@ mortar_label.grid(
 )
 
 
+# Mortar X
+
 mortar_x_label = tk.Label(
     coordinate_frame,
     text="X:"
@@ -192,9 +178,8 @@ mortar_x_label.grid(
     row=1,
     column=0,
     sticky="w",
-    padx=(0, 10)
+    padx=(0, 5)
 )
-
 
 mortar_x = tk.Entry(
     coordinate_frame,
@@ -210,6 +195,8 @@ mortar_x.grid(
 )
 
 
+# Mortar Y
+
 mortar_y_label = tk.Label(
     coordinate_frame,
     text="Y:"
@@ -219,9 +206,8 @@ mortar_y_label.grid(
     row=2,
     column=0,
     sticky="w",
-    padx=(0, 10)
+    padx=(0, 5)
 )
-
 
 mortar_y = tk.Entry(
     coordinate_frame,
@@ -256,6 +242,8 @@ target_label.grid(
 )
 
 
+# Target X
+
 target_x_label = tk.Label(
     coordinate_frame,
     text="X:"
@@ -265,9 +253,8 @@ target_x_label.grid(
     row=4,
     column=0,
     sticky="w",
-    padx=(0, 10)
+    padx=(0, 5)
 )
-
 
 target_x = tk.Entry(
     coordinate_frame,
@@ -283,6 +270,8 @@ target_x.grid(
 )
 
 
+# Target Y
+
 target_y_label = tk.Label(
     coordinate_frame,
     text="Y:"
@@ -292,9 +281,8 @@ target_y_label.grid(
     row=5,
     column=0,
     sticky="w",
-    padx=(0, 10)
+    padx=(0, 5)
 )
-
 
 target_y = tk.Entry(
     coordinate_frame,
@@ -310,11 +298,11 @@ target_y.grid(
 )
 
 
-# =========================================================
-# BUTTONS
-# =========================================================
+# ---------------------------------------------------------
+# Buttons
+# ---------------------------------------------------------
 
-button_frame = tk.Frame(left_frame)
+button_frame = tk.Frame(root)
 
 button_frame.pack(pady=25)
 
@@ -347,12 +335,12 @@ clear_button.grid(
 )
 
 
-# =========================================================
-# RESULT
-# =========================================================
+# ---------------------------------------------------------
+# Result
+# ---------------------------------------------------------
 
 result_label = tk.Label(
-    left_frame,
+    root,
     text="Distance",
     font=("Arial", 11, "bold")
 )
@@ -361,7 +349,7 @@ result_label.pack(pady=(0, 5))
 
 
 result = tk.Entry(
-    left_frame,
+    root,
     width=20,
     font=("Arial", 14, "bold"),
     justify="center",
@@ -371,60 +359,24 @@ result = tk.Entry(
 result.pack()
 
 
-
-#==========================================================
-# RIGHT SIDE - MAP
-# =========================================================
-
-map_frame = tk.Frame(
-    right_frame,
-    borderwidth=2,
-    relief="groove"
-)
-
-map_frame.pack(
-    fill="both",
-    expand=True
-)
-
-
-map_label = tk.Label(
-    map_frame,
-    text="MAP OFFLINE",
-    font=("Arial", 18, "bold")
-)
-
-map_label.place(
-    relx=0.5,
-    rely=0.5,
-    anchor="center"
-)
-
-
-# =========================================================
-# KEYBOARD SHORTCUTS
-# =========================================================
+# ---------------------------------------------------------
+# Keyboard shortcuts
+# ---------------------------------------------------------
 
 # Enter = Calculate
-root.bind(
-    "<Return>",
-    lambda event: calculate_distance()
-)
+root.bind("<Return>", lambda event: calculate_distance())
 
 # Escape = Clear
-root.bind(
-    "<Escape>",
-    lambda event: clear_fields()
-)
+root.bind("<Escape>", lambda event: clear_fields())
 
 
-# Start with Mortar X selected
+# Put cursor in the first input when application starts
 mortar_x.focus()
 
 
-# =========================================================
-# START APPLICATION
-# =========================================================
+# ---------------------------------------------------------
+# Start application
+# ---------------------------------------------------------
 
 root.mainloop()
-
+```
